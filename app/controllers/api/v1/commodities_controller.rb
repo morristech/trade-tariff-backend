@@ -58,10 +58,29 @@ module Api
       private
 
       def find_commodity
+        Rails.logger.info ""
+        Rails.logger.info "-" * 100
+        Rails.logger.info ""
+        Rails.logger.info "[FIND_COMMODITY] params: #{params.inspect}"
+        Rails.logger.info ""
+
         @commodity = Commodity.actual
                               .declarable
                               .by_code(params[:id])
                               .take
+
+        Rails.logger.info ""
+        Rails.logger.info "@commodity.goods_nomenclature_item_id: #{@commodity.goods_nomenclature_item_id}"
+        Rails.logger.info ""
+        Rails.logger.info ""
+        Rails.logger.info "@commodity: #{@commodity.inspect}"
+        Rails.logger.info ""
+        Rails.logger.info "@commodity.children: #{@commodity.children.inspect}"
+        Rails.logger.info ""
+        Rails.logger.info "HiddenGoodsNomenclature.codes: #{HiddenGoodsNomenclature.codes.inspect}"
+        Rails.logger.info ""
+        Rails.logger.info "-" * 100
+        Rails.logger.info ""
 
         raise Sequel::RecordNotFound if @commodity.children.any?
         raise Sequel::RecordNotFound if @commodity.goods_nomenclature_item_id.in? HiddenGoodsNomenclature.codes
